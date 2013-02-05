@@ -116,20 +116,7 @@ public class JsonHttpResponseHandler extends AsyncHttpResponseHandler {
     // Pre-processing of messages (executes in background threadpool thread)
     //
 
-    @Override
-<<<<<<< HEAD
-    protected void sendSuccessMessage(int statusCode, String responseBody) {
-    	if (statusCode != HttpStatus.SC_NO_CONTENT){
-	        try {
-	            Object jsonResponse = parseResponse(responseBody);
-	            sendMessage(obtainMessage(SUCCESS_JSON_MESSAGE, new Object[]{statusCode, jsonResponse}));
-	        } catch(JSONException e) {
-	            sendFailureMessage(e, responseBody);
-	        }
-    	}else{
-    		sendMessage(obtainMessage(SUCCESS_JSON_MESSAGE, new Object[]{statusCode, new JSONObject()}));
-    	}
-=======
+@Override
     protected void sendSuccessMessage(int statusCode, Header[] headers, String responseBody) {
         try {
             Object jsonResponse = parseResponse(responseBody);
@@ -137,7 +124,7 @@ public class JsonHttpResponseHandler extends AsyncHttpResponseHandler {
         } catch(JSONException e) {
             sendFailureMessage(e, responseBody);
         }
->>>>>>> 3e12dea27ca068079ede1e8e6da392166873ce38
+
     }
 
 
@@ -167,7 +154,8 @@ public class JsonHttpResponseHandler extends AsyncHttpResponseHandler {
         }
     }
 
-    protected Object parseResponse(String responseBody) throws JSONException {
+//TC: public to support extra parsing on thread pool thread
+    public Object parseResponse(String responseBody) throws JSONException {
         Object result = null;
         //trim the string to prevent start with blank, and test if the string is valid JSON, because the parser don't do this :(. If Json is not valid this will return null
 		responseBody = responseBody.trim();
